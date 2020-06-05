@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Virus CheckerBoard </title>
+    <meta charset ="utf-8" >
+    <meta name="author" content="Chevano Gordon" >
+    <meta name="description" content="CheckerBoard" >
+    <meta name="viewport" content="width=device-width,initial=1.0" >
+    <style type="text/css">
+      td {
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        font-weight: bold;
+      }
+      table {
+        border-collapse: collapse;
+        border: 1px solid black;
+      }
+      table.center {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      input {
+        text-align: center;
+      }
+      input[type=button] {
+        background-color: DarkGrey;
+        border: 1px solid black;
+        color: white;
+        padding: 2px 22px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor:pointer
+      }
+      h1 {
+        text-align: center;
+        background-color: white;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1> Chevano Gordon </h1>
+      Width: &nbsp &nbsp;
+    <input type="text" placeholder="W" id="width">
+      &nbsp &nbsp 
+      Height: &nbsp &nbsp;
+    <input type="text" placeholder="H" id="height">
+      &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp;
+    <input onclick="generate()" type="button" value="BUILD"> 
+      <br>
+      Cure Mode: <input type="checkbox" id="mode">
+      <br>
+    <table border="1" id="checkerBoard" align="center"> </table>
+    <script type="text/javascript">
+      function generate(){
+        //getting the value of the height and width
+        var width  = document.getElementById('width').value;
+        var height = document.getElementById('height').value;
+        var checkerBoard = document.getElementById('checkerBoard');
+        var inn = "";
+        var col = ["yellow","red"];
+        var a   = 0;
+
+        //generating random numbers
+        var rand = [Math.floor(Math.random()*height),Math.floor(Math.random()*width)];
+        for(i = 0; i < height; i++){
+          //Generating each row
+          inn += "<tr>";
+          var td = "";
+          var b  = a;
+          for(j = 0; j < width; j++){
+            //Generating each cell
+            if(i==rand[0] && j==rand[1])
+              x = "<td style='background-color:"+col[b]+";' id='A"+i+""+j+"' onclick='fun(this.id);'>V</td>";
+            else
+              x = "<td style='background-color:"+col[b]+";' id='A"+i+""+j+"' onclick='fun(this.id);'></td>";
+            b = (b+1)%2;
+            td += x;
+          }
+          inn += td + "</tr>";
+          a = (a+1)%2;
+        }
+
+        //setting inner html of table tag to inn
+        checkerBoard.innerHTML = inn;
+      }
+
+      function fun(td_id){
+        //to know whether mode is checked or not
+        var mode = document.getElementById('mode').checked;
+        var val  = document.getElementById(td_id).innerHTML;
+
+        if(mode == true){
+          //if mode is checked and it cell has V then remove V
+          if(val == "V")
+            document.getElementById(td_id).innerHTML="";
+        }
+        else{
+          if(val=="V"){
+            //generating left right up down cells ids
+            var left  = td_id[0] + td_id[1] + (td_id[2]-1);
+            var right = td_id[0] + td_id[1] + (parseInt(td_id[2])+1);
+            var down  = td_id[0] + (parseInt(td_id[1])+1) + td_id[2];
+            var up    = td_id[0] + (td_id[1]-1)+td_id[2];
+
+            //setting V to up down left right
+            try {
+              document.getElementById(left).innerHTML="V";
+            }
+            catch(err){}
+            try {
+              document.getElementById(right).innerHTML="V";
+            }
+            catch(err){}
+            try {
+              document.getElementById(down).innerHTML="V";
+            }
+            catch(err){}
+            try {
+             document.getElementById(up).innerHTML="V";
+            }
+            catch(err){}
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
